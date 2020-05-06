@@ -4,13 +4,17 @@ from marshmallow import Schema, fields
 
 
 class UserSchema(Schema):
-    username = fields.Str()
-    email = fields.Email()
-    password = fields.Str(load_only=True)
+    id = fields.Integer()
+    username = fields.Str(required=True)
+    email = fields.Email(required=True)
+    password = fields.Str(required=True, load_only=True)
     image = fields.Url()
     token = fields.Str(dump_only=True)
-    createdAt = fields.DateTime(attribute='created_at', dump_only=True)
-    updatedAt = fields.DateTime(attribute='updated_at')
+    created_at = fields.DateTime(dump_only=True)
+    updated_at = fields.DateTime()
+
+    class Meta:
+        strict = True
 
 
 user_schema = UserSchema()

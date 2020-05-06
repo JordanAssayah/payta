@@ -9,17 +9,14 @@ class User(SurrogatePK, Model):
     __tablename__ = 'users'
     username = Column(db.String(80), unique=True, nullable=False)
     email = Column(db.String(100), unique=True, nullable=False)
-    password = Column(db.Binary(128), nullable=True)
+    password = Column(db.Binary(128), nullable=False)
     image = Column(db.String(120), nullable=True)
     token: str = ''
 
-    def __init__(self, username, email, password=None, **kwargs):
+    def __init__(self, **kwargs):
         """Create instance."""
-        db.Model.__init__(self, username=username, email=email, **kwargs)
-        if password:
-            self.set_password(password)
-        else:
-            self.password = None
+        db.Model.__init__(self, **kwargs)
+        self.set_password(kwargs.get('password'))
 
     def set_password(self, password):
         """Set password."""
