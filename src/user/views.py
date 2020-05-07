@@ -3,7 +3,7 @@
 from flask import Blueprint
 from .models import User
 from flask_apispec import use_kwargs, marshal_with
-from .serializers import user_schema
+from .serializers import user_schemas, user_schema
 
 blueprint = Blueprint('user', __name__)
 
@@ -14,3 +14,10 @@ blueprint = Blueprint('user', __name__)
 def create_user(**kwargs):
     new_user = User.create(**kwargs)
     return new_user
+
+
+@blueprint.route('/api/users', methods=['GET'])
+@marshal_with(user_schemas)
+def get_all():
+    user = User.query.all()
+    return user
