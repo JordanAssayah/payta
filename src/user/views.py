@@ -21,3 +21,10 @@ def create_user(**kwargs):
 def get_all():
     users = User.query.all()
     return users
+
+
+@blueprint.route('/api/single_user', methods=['GET'])
+@marshal_with(user_schema)
+def get_one():
+    user = User.query.get(4)
+    return user 
