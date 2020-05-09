@@ -23,8 +23,8 @@ def get_all():
     return users
 
 
-@blueprint.route('/api/users/single', methods=['GET'])
+@blueprint.route('/api/users/<id>', methods=['GET'])
 @marshal_with(user_schema)
-def get_one():
-    user = User.query.get(4)
+def get_one(id):
+    user = User.query.get(id)
     return user 
