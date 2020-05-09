@@ -28,3 +28,11 @@ def get_all():
 def get_one(id):
     user = User.query.get(id)
     return user 
+
+
+@blueprint.route('/api/users/<id>', methods=['DELETE'])
+@use_kwargs(user_schema)
+@marshal_with(user_schema)
+def delete_one(id):
+    user = User.delete(id)
+    return user 
