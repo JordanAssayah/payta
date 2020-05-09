@@ -36,3 +36,16 @@ def get_one(id):
 def delete_one(id):
     user = User.delete(id)
     return user 
+
+
+@blueprint.route('/api/users/<id>', methods=['PUT'])
+@use_kwargs(user_schema)
+@marshal_with(user_schema)
+def replace(id):
+    info = request.get_json()
+    if id in users:
+            reponse = ({"error": "id already exists"}), 400)
+            return rep
+     users.update({id: info})
+     reponse = ({"message": "id created"})
+     return reponse
