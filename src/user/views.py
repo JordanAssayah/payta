@@ -3,7 +3,7 @@
 from flask import Blueprint
 from .models import User
 from flask_apispec import use_kwargs, marshal_with
-from .serializers import user_schemas, user_schema
+from .serializers import user_schemas, user_schema, user_schema_put_and_patch
 
 blueprint = Blueprint('user', __name__)
 
@@ -27,7 +27,7 @@ def get_all():
 @marshal_with(user_schema)
 def get_one(id):
     user = User.query.get(id)
-    return user 
+    return user
 
 
 @blueprint.route('/api/users/<id>', methods=['DELETE'])
@@ -35,17 +35,13 @@ def get_one(id):
 @marshal_with(user_schema)
 def delete_one(id):
     user = User.delete(id)
-    return user 
+    return user
 
 
 @blueprint.route('/api/users/<id>', methods=['PUT'])
-@use_kwargs(user_schema)
-@marshal_with(user_schema)
-def replace(id):
-    info = request.get_json()
-    if id in users:
-            reponse = ({"error": "id already exists"}), 400)
-            return rep
-     users.update({id: info})
-     reponse = ({"message": "id created"})
-     return reponse
+@use_kwargs(user_schema_put_and_patch)
+@marshal_with(user_schema_put_and_patch)
+def update_user(id, **kwargs):
+    user = User.query.get(id)
+    user.update(**kwargs)
+    return user
