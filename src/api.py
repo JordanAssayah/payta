@@ -3,7 +3,7 @@
 from flask import Flask
 from src.extensions import bcrypt, cache, db, migrate, jwt, cors
 
-from src import commands, user
+from src import commands, user, order
 from src.settings import ProdConfig
 from src.exceptions import InvalidUsage
 
@@ -40,6 +40,7 @@ def register_blueprints(app):
     cors.init_app(user.views.blueprint, origins=origins)
 
     app.register_blueprint(user.views.blueprint)
+    app.register_blueprint(order.views.blueprint)
 
 
 def register_errorhandlers(app):
