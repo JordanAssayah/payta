@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """User views."""
 from flask import Blueprint
+from http import HTTPStatus
 from .models import User
 from flask_apispec import use_kwargs, marshal_with
 from .serializers import user_schemas, user_schema, user_schema_put_and_patch
@@ -20,22 +21,20 @@ def create_user(**kwargs):
 @marshal_with(user_schemas)
 def get_all():
     users = User.query.all()
-    return users
+    return users, HTTPStatus.OK
 
 
 @blueprint.route('/api/users/<id>', methods=['GET'])
 @marshal_with(user_schema)
 def get_one(id):
     user = User.query.get(id)
-    return user
+    return user, HTTPStatus.OK
 
 
 @blueprint.route('/api/users/<id>', methods=['DELETE'])
-@use_kwargs(user_schema)
-@marshal_with(user_schema)
 def delete_one(id):
-    user = User.delete(id)
-    return user
+    User.query.filter_by(id=id).first_or_404().delete()
+    return '', HTTPStatus.NO_CONTENT
 
 
 @blueprint.route('/api/users/<id>', methods=['PUT'])
@@ -44,4 +43,4 @@ def delete_one(id):
 def update_user(id, **kwargs):
     user = User.query.get(id)
     user.update(**kwargs)
-    return user
+    return user, HTTPStatus.OK
